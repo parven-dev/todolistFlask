@@ -17,5 +17,7 @@ class TodoList(db.Model):
     db_priority = db.Column(db.String)
 
 
+
+
 with app.app_context():
     db.create_all()
