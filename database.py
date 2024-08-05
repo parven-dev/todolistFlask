@@ -1,4 +1,3 @@
-
 from main import db, app
 
 
@@ -12,11 +11,8 @@ class User(db.Model):
 
 class TodoList(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    db_team_member = db.Column(db.String)
     db_task = db.Column(db.String)
     db_priority = db.Column(db.String)
-
-
 
 
 with app.app_context():

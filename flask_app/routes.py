@@ -1,6 +1,6 @@
 from flask import render_template, request
 from flask_app.form import UserLogin, SignUp
-from database import User
+from database import User, TodoList
 
 from main import app, db
 
@@ -21,7 +21,16 @@ def todoList():
     if request.method == "POST":
         topic = request.form["text"]
         options = request.form["options"]
-        print(options)
+
+        add_data = TodoList(
+            db_task=topic,
+            db_priority=options
+
+        )
+        db.session.add(add_data)
+        db.session.commit()
+
+        return f"topics: {topic} options: {options}"
     return render_template("/index.html")
 
 @app.route("/signup", methods=["GET", "POST"])
