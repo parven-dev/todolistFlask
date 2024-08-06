@@ -1,23 +1,54 @@
-from flask import render_template, request
+from flask import render_template, request, session, redirect
+
 from flask_app.form import UserLogin, SignUp
 from database import User, TodoList
 
 from main import app, db
 
+from flask_login import (
+    UserMixin,
+    login_user,
+    LoginManager,
+    current_user,
+    logout_user,
+    login_required,
+)
 
-@app.route("/")
-def hello_world():
-    return "<h1>Welcome</h1>"
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+login_manager.session_protection = "strong"
+login_manager.login_view = "login"
+login_manager.login_message_category = "info"
 
 
-@app.route('/login')
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+
+@app.route('/login', methods=["GET", "POST"])
 def login():
+    print('fuk')
     user_login = UserLogin()
+    if user_login.validate() or request.method == "POST":
+        print("you")
+        user = User.query.filter_by(db_email=user_login.email.data).first()
+        print(user)
+        if user and user.db_password == user_login.password.data:
+            print(user)
+            login_user(user)
+            print("yes i m login")
+            return "<h2> you login successfully </h2>"
+        else:
+            print('i m not')
+            return "<h2>email password wrong</h2>"
     return render_template("/login.html", login=user_login)
 
 
-@app.route("/todo", methods=["GET", "POST"])
+@app.route("/", methods=["GET", "POST"])
 def todoList():
+    show_todo = TodoList.query.all()
     if request.method == "POST":
         topic = request.form["text"]
         options = request.form["options"]
@@ -30,8 +61,9 @@ def todoList():
         db.session.add(add_data)
         db.session.commit()
 
-        return f"topics: {topic} options: {options}"
-    return render_template("/index.html")
+        return redirect("/")
+    return render_template("/index.html", task=show_todo)
+
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():

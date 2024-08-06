@@ -1,33 +1,36 @@
-
 {% extends 'base.html' %}
 
 {% block content %}
-
-<form method="post">
-    <div class="form-outline mb-3">
-    {{ signup.name(class="form-control form-control-lg", placeholder="Enter Name") }}
+<div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
+  <div class="form-signin mask-custom p-5">
+    <div class="text-center pb-2">
+      <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-todo-list/check1.webp"
+        alt="Check" width="60">
+      <h2 class="my-4 text-black">Sign Up</h2>
     </div>
-
-    <div class="form-outline mb-4">
-    {{ signup.email(class="form-control form-control-lg", placeholder="Enter a valid email address") }}
-    </div>
-    <div class="form-outline mb-3">
-    {{ signup.password(class="form-control form-control-lg", placeholder="Enter Password") }}
-    </div>
-    <div class="form-outline mb-3">
-    {{ signup.confirm_password(class="form-control form-control-lg", placeholder="confirm Password") }}
-    </div>
-
-    <div class="d-flex justify-content-between align-items-center">
+    <form method="post">
+      <div class="form-outline mb-3">
+        {{ signup.name(class="form-control form-control-lg", placeholder="Enter Name") }}
+      </div>
+      <div class="form-outline mb-4">
+        {{ signup.email(class="form-control form-control-lg", placeholder="Enter a valid email address") }}
+      </div>
+      <div class="form-outline mb-3">
+        {{ signup.password(class="form-control form-control-lg", placeholder="Enter Password") }}
+      </div>
+      <div class="form-outline mb-3">
+        {{ signup.confirm_password(class="form-control form-control-lg", placeholder="Confirm Password") }}
+      </div>
+      <div class="d-flex justify-content-between align-items-center">
         <a href="#!" class="text-body">Forgot password?</a>
-    </div>
-
-    <div class="text-center text-lg-start mt-4 pt-2">
+      </div>
+      <div class="text-center text-lg-start mt-4 pt-2">
         <button type="button" class="btn btn-primary btn-lg"
-              style="padding-left: 2.5rem; padding-right: 2.5rem;">{{ signup.submit }}</button>
-            <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="#!"
-                class="link-danger">Register</a></p>
-          </div>
-
-        </form>
- {% endblock %}
+          style="padding-left: 2.5rem; padding-right: 2.5rem;">{{ signup.submit }}</button>
+        <p class="small fw-bold mt-2 pt-1 mb-0">Already have an account? <a href="#!"
+            class="link-danger">Login</a></p>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
