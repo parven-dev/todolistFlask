@@ -1,13 +1,11 @@
-from flask import render_template, request
+from flask import render_template, request, session
+
 from flask_app.form import UserLogin, SignUp
 from database import User, TodoList
 
 from main import app, db
 
 
-@app.route("/")
-def hello_world():
-    return "<h1>Welcome</h1>"
 
 
 @app.route('/login')
@@ -16,8 +14,9 @@ def login():
     return render_template("/login.html", login=user_login)
 
 
-@app.route("/todo", methods=["GET", "POST"])
+@app.route("/", methods=["GET", "POST"])
 def todoList():
+    show_todo = TodoList.query.all()
     if request.method == "POST":
         topic = request.form["text"]
         options = request.form["options"]
@@ -31,7 +30,7 @@ def todoList():
         db.session.commit()
 
         return f"topics: {topic} options: {options}"
-    return render_template("/index.html")
+    return render_template("/index.html", task=show_todo)
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
