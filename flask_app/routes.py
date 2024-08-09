@@ -1,4 +1,4 @@
-from flask import render_template, request
+from flask import render_template, request, redirect
 from flask_login import login_required, logout_user, login_user, LoginManager
 
 from flask_app.form import UserLogin, SignUp
@@ -17,11 +17,6 @@ login_manager.init_app(app)
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
-
-
-@app.route("/")
-def hello_world():
-    return "<h1>Welcome</h1>"
 
 
 @app.route('/login', methods=["GET", "POST"])
@@ -47,22 +42,30 @@ def logout():
     return "<h1>user logout successfully </h1>"
 
 
-@app.route("/todo", methods=["GET", "POST"])
+@app.route("/", methods=["GET", "POST"])
 def todoList():
+    todo = TodoList.query.all()
+    print(todo)
+
     if request.method == "POST":
         topic = request.form["text"]
-        options = request.form["options"]
-
+        options = request.form.get('options')
         add_data = TodoList(
             db_task=topic,
             db_priority=options
-
         )
         db.session.add(add_data)
         db.session.commit()
+        return redirect("/")
+    return render_template("/index.html", todo=todo)
 
-        return f"topics: {topic} options: {options}"
-    return render_template("/index.html")
+
+@app.route("/delete/<int:sno>/")
+def delete(sno):
+    todo_id = TodoList.query.get(sno)
+    db.session.delete(todo_id)
+    db.session.commit()
+    return render_template("/index.html", sno=sno)
 
 
 @app.route("/signup", methods=["GET", "POST"])
