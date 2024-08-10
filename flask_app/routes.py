@@ -45,8 +45,6 @@ def logout():
 @app.route("/", methods=["GET", "POST"])
 def todoList():
     todo = TodoList.query.all()
-    print(todo)
-
     if request.method == "POST":
         topic = request.form["text"]
         options = request.form.get('options')
@@ -60,12 +58,13 @@ def todoList():
     return render_template("/index.html", todo=todo)
 
 
-@app.route("/delete/<int:sno>/")
+@app.route("/delete/<int:sno>/", methods=["POSt", "GET"])
 def delete(sno):
-    todo_id = TodoList.query.get(sno)
+    todo_id = TodoList.query.get_or_404(sno)
+
     db.session.delete(todo_id)
     db.session.commit()
-    return render_template("/index.html", sno=sno)
+    return render_template("/index.html")
 
 
 @app.route("/signup", methods=["GET", "POST"])
