@@ -62,8 +62,12 @@ def todoList():
 def delete(sno):
     todo_id = TodoList.query.get_or_404(sno)
 
-    db.session.delete(todo_id)
-    db.session.commit()
+    try:
+        db.session.delete(todo_id)
+        db.session.commit()
+
+    except:
+        print("not found")
     return render_template("/index.html")
 
 
