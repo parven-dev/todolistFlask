@@ -74,7 +74,9 @@
       {% endif %}
 
        <td class="align-middle">
+         <form action="{{url_for('delete', sno=item.id)}}" method="post">
         <button>Delete</button>
+         </form>
       </td>
     </tr>
   {% endfor %}

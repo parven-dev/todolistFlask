@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, url_for
 from flask_login import login_required, logout_user, login_user, LoginManager
 
 from flask_app.form import UserLogin, SignUp
@@ -31,7 +31,7 @@ def login():
             login_user(user)
             return "you login successfully"
         else:
-            return "Fuck off"
+            return "you are not allowed"
 
     return render_template("/login.html", login=user_login)
 
@@ -42,12 +42,17 @@ def logout():
     return "<h1>user logout successfully </h1>"
 
 
-@app.route("/", methods=["GET", "POST"])
-def todoList():
+@app.route("/")
+def home():
+    return render_template("/home.html")
+
+
+@app.route("/todo", methods=["GET", "POST"])
+def todo():
     todo = TodoList.query.all()
     if request.method == "POST":
         topic = request.form["text"]
-        options = request.form.get('options')
+        options = request.form['options']
         add_data = TodoList(
             db_task=topic,
             db_priority=options
@@ -55,20 +60,16 @@ def todoList():
         db.session.add(add_data)
         db.session.commit()
         return redirect("/")
-    return render_template("/index.html", todo=todo)
+    return render_template("/todo.html", todo=todo)
 
 
-@app.route("/delete/<int:sno>/", methods=["POSt", "GET"])
+@app.route("/delete/<int:sno>/", methods=["POST", "GET"])
 def delete(sno):
     todo_id = TodoList.query.get_or_404(sno)
-
-    try:
-        db.session.delete(todo_id)
-        db.session.commit()
-
-    except:
-        print("not found")
-    return render_template("/index.html")
+    db.session.delete(todo_id)
+    db.session.commit()
+    print("i m inside database")
+    return redirect(url_for("login"))
 
 
 @app.route("/signup", methods=["GET", "POST"])
