@@ -19,6 +19,13 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
+@app.route("/dashboard")
+@login_required
+def dashboard():
+    users = User.query.all()
+    return render_template("/dashboard.html", user=users)
+
+
 @app.route('/login', methods=["GET", "POST"])
 def login():
     user_login = UserLogin()
@@ -39,6 +46,7 @@ def login():
 @app.route("/logout")
 @login_required
 def logout():
+    logout_user()
     return "<h1>user logout successfully </h1>"
 
 
@@ -85,7 +93,7 @@ def signup():
             add_users = User(db_name=name,
                              db_email=email,
                              db_password=password,
-                             db_confirm_password=password
+                             db_confirm_password=password,
                              )
             db.session.add(add_users)
             db.session.commit()
