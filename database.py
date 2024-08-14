@@ -16,7 +16,7 @@ class TodoList(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     db_task = db.Column(db.String)
     db_priority = db.Column(db.String)
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    # user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
 
 with app.app_context():
     db.create_all()
