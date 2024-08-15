@@ -7,7 +7,7 @@ class User(db.Model, UserMixin):
     db_email = db.Column(db.String)
     db_password = db.Column(db.String)
     db_confirm_password = db.Column(db.String)
-    todo_list = db.relationship("TodoList", backref="user", lazy="dynamic")
+    # todo_list = db.relationship("TodoList", backref="user", lazy="dynamic")
 
     def __repr__(self):
         return f"User('{self.db_name}', '{self.db_email}')"
