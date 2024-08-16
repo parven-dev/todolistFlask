@@ -15,12 +15,18 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
+        {% if current_user.is_authenticated  %}
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{{ url_for('logout') }}">Logout</a>
+        </li>
+        {% else %}
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="{{ url_for('login') }}">Login</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{ url_for('signup') }}">Sign Up</a>
         </li>
+        {% endif %}
         <li class="nav-item">
           <a class="nav-link" href="{{ url_for('todo') }}">Create Todo List</a>
         </li>
