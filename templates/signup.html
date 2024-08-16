@@ -9,18 +9,14 @@
       <h2 class="my-4 text-black">Sign Up</h2>
     </div>
     <form method="post">
-      <div class="form-outline mb-3">
-        {{ signup.username(class="form-control form-control-lg", placeholder="Enter Username") }}
-      </div>
+
       <div class="form-outline mb-4">
         {{ signup.email(class="form-control form-control-lg", placeholder="Enter a valid email address") }}
       </div>
       <div class="form-outline mb-3">
         {{ signup.password(class="form-control form-control-lg", placeholder="Enter Password") }}
       </div>
-      <div class="form-outline mb-3">
-        {{ signup.confirm_password(class="form-control form-control-lg", placeholder="Confirm Password") }}
-      </div>
+
       <div class="d-flex justify-content-between align-items-center">
         <a href="#!" class="text-body">Forgot password?</a>
       </div>

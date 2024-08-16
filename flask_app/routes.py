@@ -1,5 +1,5 @@
 from flask import render_template, request, redirect, url_for
-from flask_login import login_required, logout_user, login_user, LoginManager
+from flask_login import login_required, logout_user, login_user, LoginManager, current_user
 
 from flask_app.form import UserLogin, SignUp
 from database import User, TodoList
@@ -63,7 +63,8 @@ def todo():
         options = request.form['options']
         add_data = TodoList(
             db_task=topic,
-            db_priority=options
+            db_priority=options,
+            user_id=current_user.id
         )
         db.session.add(add_data)
         db.session.commit()
@@ -84,21 +85,22 @@ def delete(sno):
 def signup():
     user_signup = SignUp()
     if request.method == "POST" or user_signup.validate():
-        name = user_signup.username.data
+        # name = user_signup.username.data
         email = user_signup.email.data
         password = user_signup.password.data
-        confirm_password = user_signup.confirm_password.data
+        # confirm_password = user_signup.confirm_password.data
 
-        if password == confirm_password:
-            add_users = User(db_name=name,
-                             db_email=email,
-                             db_password=password,
-                             db_confirm_password=password,
+        # if password == confirm_password:
+        add_users = User(
+            # db_name=name,
+            db_email=email,
+            db_password=password,
+            # db_confirm_password=password,
                              )
-            db.session.add(add_users)
-            db.session.commit()
+        db.session.add(add_users)
+        db.session.commit()
 
-        return f"name: {name}, email: {email}, password: {password}, confirm_password: {confirm_password}"
+        return f"name: good"
     else:
         print("not in")
     return render_template("/signup.html", signup=user_signup)
