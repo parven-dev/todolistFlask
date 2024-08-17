@@ -22,8 +22,11 @@ def load_user(user_id):
 @app.route("/dashboard")
 @login_required
 def dashboard():
-    users = User.query.all()
-    return render_template("/dashboard.html", user=users)
+    user1 = User.query.all()
+    todo = TodoList.query.all()
+
+    print(user1, todo)
+    return render_template("/dashboard.html", user=user1)
 
 
 @app.route('/login', methods=["GET", "POST"])
@@ -36,9 +39,9 @@ def login():
 
         if user and user.db_password == password:
             login_user(user)
-            return "you login successfully"
+            return redirect(url_for("dashboard"))
         else:
-            return "you are not allowed"
+            return redirect(url_for("login"))
 
     return render_template("/login.html", login=user_login)
 
@@ -47,7 +50,9 @@ def login():
 @login_required
 def logout():
     logout_user()
-    return "<h1>user logout successfully </h1>"
+    return redirect(url_for('login'))
+
+
 
 
 @app.route("/")
@@ -58,6 +63,8 @@ def home():
 @app.route("/todo", methods=["GET", "POST"])
 def todo():
     todo = TodoList.query.all()
+    all_user = User.query.all()
+    print(todo)
     if request.method == "POST":
         topic = request.form["text"]
         options = request.form['options']
@@ -68,8 +75,8 @@ def todo():
         )
         db.session.add(add_data)
         db.session.commit()
-        return redirect("/")
-    return render_template("/todo.html", todo=todo)
+        return redirect(url_for("todo"))
+    return render_template("/todo.html", todo=todo, users=all_user)
 
 
 @app.route("/delete/<int:sno>/", methods=["POST", "GET"])
@@ -84,10 +91,11 @@ def delete(sno):
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
     user_signup = SignUp()
-    if request.method == "POST" or user_signup.validate():
+    if user_signup.validate() or request.method == "POST":
         # name = user_signup.username.data
         email = user_signup.email.data
         password = user_signup.password.data
+        print(email, password)
         # confirm_password = user_signup.confirm_password.data
 
         # if password == confirm_password:
@@ -100,7 +108,6 @@ def signup():
         db.session.add(add_users)
         db.session.commit()
 
-        return f"name: good"
-    else:
-        print("not in")
+        return redirect(url_for('login'))
+
     return render_template("/signup.html", signup=user_signup)
