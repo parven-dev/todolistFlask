@@ -50,7 +50,7 @@
 {% for item in todo %}
     <tr class="fw-normal">
       <th>
-        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
+<img src="https://robohash.org/{{ item.user.profile }}.png"
              alt="avatar 1" style="width: 45px; height: auto;">
         <span class="ms-2">{{ item.user.db_email }}</span>
       </th>
@@ -73,11 +73,13 @@
 
       {% endif %}
 
+        {% if current_user.is_authenticated %}
        <td class="align-middle">
          <form action="{{url_for('delete', sno=item.id)}}" method="post">
         <button>Delete</button>
          </form>
       </td>
+        {% endif %}
     </tr>
   {% endfor %}
         </tbody>

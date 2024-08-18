@@ -5,6 +5,8 @@ from flask_app.form import UserLogin, SignUp
 from database import User, TodoList
 
 from main import app, db
+from names_generator import generate_name
+
 
 login_manager = LoginManager()
 login_manager.session_protection = "strong"
@@ -95,7 +97,6 @@ def signup():
         # name = user_signup.username.data
         email = user_signup.email.data
         password = user_signup.password.data
-        print(email, password)
         # confirm_password = user_signup.confirm_password.data
 
         # if password == confirm_password:
@@ -103,6 +104,7 @@ def signup():
             # db_name=name,
             db_email=email,
             db_password=password,
+            profile=generate_name()
             # db_confirm_password=password,
                              )
         db.session.add(add_users)

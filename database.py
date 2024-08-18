@@ -7,6 +7,7 @@ class User(db.Model, UserMixin):
     # db_name = db.Column(db.String, unique=True, nullable=False)
     db_email = db.Column(db.String)
     db_password = db.Column(db.String)
+    profile = db.Column(db.String)
     # db_confirm_password = db.Column(db.String)
     # todo_list = db.relationship("TodoList", backref="user", lazy="dynamic")
     todolist = db.relationship("TodoList", backref="user", lazy=True)
