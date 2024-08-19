@@ -7,7 +7,6 @@ from database import User, TodoList
 from main import app, db
 from names_generator import generate_name
 
-
 login_manager = LoginManager()
 login_manager.session_protection = "strong"
 login_manager.login_view = "login"
@@ -53,8 +52,6 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('login'))
-
-
 
 
 @app.route("/")
@@ -106,10 +103,15 @@ def signup():
             db_password=password,
             profile=generate_name()
             # db_confirm_password=password,
-                             )
+        )
         db.session.add(add_users)
         db.session.commit()
 
         return redirect(url_for('login'))
 
     return render_template("/signup.html", signup=user_signup)
+
+
+@app.route("/otp_verification")
+def otp_verification():
+    return render_template("/otp_verification.html")
