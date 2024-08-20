@@ -1,11 +1,14 @@
 from flask import Flask, render_template
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_keyskjbfjksbfj_here'  # Set your secret key here
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
+app.secret_key = os.getenv("SECRET_KEY")  # Set your secret key here
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 
 db = SQLAlchemy(app)
 
