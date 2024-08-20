@@ -1,11 +1,15 @@
-from flask import render_template, request, redirect, url_for
+import random
+
+from flask import render_template, request, redirect, url_for, session
 from flask_login import login_required, logout_user, login_user, LoginManager, current_user
 
 from flask_app.form import UserLogin, SignUp
+from flask_app.smtp import  SMTP
 from database import User, TodoList
 
 from main import app, db
 from names_generator import generate_name
+
 
 login_manager = LoginManager()
 login_manager.session_protection = "strong"
@@ -97,21 +101,36 @@ def signup():
         # confirm_password = user_signup.confirm_password.data
 
         # if password == confirm_password:
-        add_users = User(
-            # db_name=name,
-            db_email=email,
-            db_password=password,
-            profile=generate_name()
-            # db_confirm_password=password,
-        )
-        db.session.add(add_users)
-        db.session.commit()
-
-        return redirect(url_for('login'))
+        if email and password:
+            get_otp = [random.randint(0, 9) for _ in range(6)]
+            otp = "".join(map(str, get_otp))
+            stm = SMTP(otp=otp)
+            stm.smtp_server()
+            print(otp)
+            session['otp'] = otp
+            session["email"] = email
+            session["password"] = password
+            return redirect(url_for('otp_verification'))
 
     return render_template("/signup.html", signup=user_signup)
 
 
-@app.route("/otp_verification")
+@app.route("/otp_verification", methods=["GET", "POST"])
 def otp_verification():
+    if request.method == "POST":
+        user_otp = request.form["otp"]
+        email = session["email"]
+        password = session["password"]
+        if user_otp == session["otp"]:
+            add_users = User(
+                # db_name=name,
+                db_email=email,
+                db_password=password,
+                profile=generate_name()
+                # db_confirm_password=password,
+            )
+            db.session.add(add_users)
+            db.session.commit()
+            return redirect(url_for("login"))
+
     return render_template("/otp_verification.html")
