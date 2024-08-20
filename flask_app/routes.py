@@ -1,10 +1,11 @@
 import random
+from functools import wraps
 
 from flask import render_template, request, redirect, url_for, session
 from flask_login import login_required, logout_user, login_user, LoginManager, current_user
 
 from flask_app.form import UserLogin, SignUp
-from flask_app.smtp import  SMTP
+from flask_app.smtp import SMTP
 from database import User, TodoList
 
 from main import app, db
@@ -23,6 +24,14 @@ login_manager.init_app(app)
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+
+def login_requireds(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
+        return func(*args, **kwargs)
+    return wrapper
 
 @app.route("/dashboard")
 @login_required
@@ -116,6 +125,7 @@ def signup():
 
 
 @app.route("/otp_verification", methods=["GET", "POST"])
+@login_requireds
 def otp_verification():
     if request.method == "POST":
         user_otp = request.form["otp"]
