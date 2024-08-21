@@ -30,11 +30,21 @@
         <li class="nav-item">
           <a class="nav-link" href="{{ url_for('todo') }}">Create Todo List</a>
         </li>
+         <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('todo') }}">
+            <img src="https://robohash.org/{{ current_user.profile }}.png" alt="Profile Picture"
+                 class="rounded-circle" style="width: 30px; height: 30px;">
+          </a>
+        </li>
 
       </ul>
     </div>
   </div>
 </nav>
 
+
+
+
 {% block content %}
 {% endblock %}
+
