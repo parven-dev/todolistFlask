@@ -11,7 +11,6 @@ from database import User, TodoList
 from main import app, db
 from names_generator import generate_name
 
-
 login_manager = LoginManager()
 login_manager.session_protection = "strong"
 login_manager.login_view = "login"
@@ -31,7 +30,9 @@ def login_requireds(func):
         if 'user_id' not in session:
             return redirect(url_for('login'))
         return func(*args, **kwargs)
+
     return wrapper
+
 
 @app.route("/dashboard")
 @login_required
@@ -94,9 +95,10 @@ def todo():
 @app.route("/delete/<int:sno>/", methods=["POST", "GET"])
 def delete(sno):
     todo_id = TodoList.query.get_or_404(sno)
-    db.session.delete(todo_id)
-    db.session.commit()
-    print("i m inside database")
+    if todo_id:
+        db.session.delete(todo_id)
+        db.session.commit()
+        return redirect(url_for("todo"))
     return redirect(url_for("login"))
 
 
